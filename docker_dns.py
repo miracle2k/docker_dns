@@ -197,7 +197,10 @@ class DockerResolver(common.ResolverBase):
 
         # We need to catch everything. Uncaught exceptian will make the server
         # stop responding
-        except:  # pylint:disable=bare-except
+        except Exception, e:  # pylint:disable=bare-except
+            if type(e) != DomainError:
+                import traceback
+                traceback.print_exc()
             if CONFIG['no_nxdomain']:
                 # FIXME surely there's a better way to give SERVFAIL
                 exception = DNSQueryTimeoutError(name)
